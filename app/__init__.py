@@ -13,10 +13,3 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
 from app import routes, models
-
-#Importar y ejecutar el scraper
-from app.eneba_scraper import fetch_game_data
-
-#Ejecutar el scraper en el contexto de la aplicación
-with app.app_context():
-    fetch_game_data()

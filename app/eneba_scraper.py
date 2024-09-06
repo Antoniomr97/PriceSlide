@@ -8,19 +8,20 @@ import time
 from datetime import datetime
 from app import db
 from app.models import Game
+import random
 
 def fetch_game_data():
     driver = webdriver.Chrome()
     driver.maximize_window()
     
-    base_url = "https://www.eneba.com/es/store/games"
+    base_url = "https://www.eneba.com/es/store/games?drms[]=steam&page=1&regions[]=global&regions[]=spain&types[]=game"
     page_number = 1
     
     while True:
-        url = f"{base_url}?page={page_number}"
+        url = f"https://www.eneba.com/es/store/games?drms[]=steam&page={page_number}&regions[]=global&regions[]=spain&types[]=game"
         driver.get(url)
 
-        scroll_pause_time = 0.2
+        scroll_pause_time = random.uniform(1, 3)
         max_scrolls = 3
 
         # Scroll down the page to load more games if needed
@@ -68,5 +69,3 @@ def fetch_game_data():
         time.sleep(3)  # Wait for the page to load
     
     driver.quit()
-
-fetch_game_data()
