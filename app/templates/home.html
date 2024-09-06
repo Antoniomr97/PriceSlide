@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <form action="" method="post">
+      <input type="text" name="game" placeholder="Buscar juego" />
+      <input type="submit" value="Buscar" />
+    </form>
+    <a href="{{ url_for('plot') }}">Ver Gráfico de Precios</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+  </body>
+</html>
