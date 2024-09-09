@@ -6,7 +6,9 @@ from flask_login import login_user, logout_user, current_user, login_required
 from app import app, db, bcrypt
 from app.models import User, Game
 from app.forms import LoginForm, RegistrationForm
-from app.eneba_scraper import fetch_game_data
+from app.eneba_scraper import fetch_game_data_eneba
+from app.g2a_scraper import fetch_game_data_g2a
+from app.instant_gaming_scraper import fetch_game_data_instant_gaming
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -71,7 +73,17 @@ def plot():
     img_base64 = base64.b64encode(img.getvalue()).decode('utf-8')
     return render_template('plot.html', img_data=img_base64)
 
-@app.route('/update_games')
+@app.route('/update_games_eneba')
 @login_required
-def update_games():
-    fetch_game_data()  # Llama a la función para actualizar los datos de los juegos
+def update_games_eneba():
+    fetch_game_data_eneba()  # Llama a la función para actualizar los datos de los juegos
+
+# @app.route('/update_games_g2a')
+# @login_required
+# def update_games_g2a():
+#     fetch_game_data_g2a()
+
+@app.route('/update_games_instant_gaming')
+@login_required
+def update_games_instant_gaming():
+    fetch_game_data_instant_gaming()
