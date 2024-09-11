@@ -6,10 +6,12 @@ from app.forms import LoginForm, RegistrationForm
 from app.eneba_scraper import fetch_game_data_eneba
 from app.instant_gaming_scraper import fetch_game_data_instant_gaming
 import pandas as pd
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import io
 import base64
-from fuzzywuzzy import process, fuzz  # Para coincidencias parciales
+from fuzzywuzzy import process, fuzz
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -43,74 +45,72 @@ def login():
 @app.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
-    min_price = None
-    min_price_store = None
+    best_match_game = None
+    additional_matches = []
+    historical_data = []
     graph_img = None
-    matched_games = []  # Lista de juegos coincidentes
+    game_name = request.args.get('game_name')
 
-    # Si se envía el formulario de búsqueda
-    if request.method == 'GET':  # Cambiado para manejar GET
-        game_name = request.args.get('game_name')  # Obtener el nombre del juego desde el formulario
+    if game_name:
+        all_games = Game.query.with_entities(Game.name).distinct().all()
+        game_names = [game.name for game in all_games]
 
-        if game_name:
-            # Obtener todos los nombres de juegos de la base de datos
-            all_games = Game.query.with_entities(Game.name).distinct().all()
-            game_names = [game.name for game in all_games]
+        matches = process.extractBests(game_name, game_names, limit=5, scorer=fuzz.partial_ratio)
+        best_match = min(matches, key=lambda x: (100 - x[1], len(x[0])))
 
-            # Encontrar las mejores coincidencias (similitud parcial)
-            matches = process.extractBests(game_name, game_names, limit=5, scorer=fuzz.partial_ratio)
+        best_name = best_match[0]
+        games_in_db = Game.query.filter_by(name=best_name).all()
 
-            # Buscar los juegos coincidentes en la base de datos
-            for match in matches:
+        if games_in_db:
+            best_price_entry = min(games_in_db, key=lambda x: x.price)
+            best_match_game = {
+                'name': best_name,
+                'best_price': best_price_entry.price,
+                'best_store': best_price_entry.store
+            }
+
+            # Obtener datos históricos de precios para el mejor juego
+            historical_data = [{
+                'date': game.date,
+                'price': game.price,
+                'store': game.store
+            } for game in games_in_db]
+
+            # Generar gráfico de evolución de precios
+            if historical_data:
+                df = pd.DataFrame(historical_data)
+                plt.figure(figsize=(12, 6))
+                for store, group in df.groupby('store'):
+                    plt.plot(group['date'], group['price'], label=store)
+                plt.xlabel('Fecha')
+                plt.ylabel('Precio')
+                plt.title(f'Evolución de Precios - {best_name}')
+                plt.legend()
+                plt.xticks(rotation=45)
+                plt.grid(True)
+                plt.tight_layout()
+
+                img = io.BytesIO()
+                plt.savefig(img, format='png')
+                img.seek(0)
+                plt.close()
+                graph_img = base64.b64encode(img.getvalue()).decode('utf-8')
+
+        additional_matches = []
+        for match in matches:
+            if match[0] != best_name:
                 name = match[0]
-                game = Game.query.filter_by(name=name).first()
-                if game:
-                    matched_games.append({
-                        'name': game.name,
-                        'min_price': game.price,
-                        'store': game.store,
-                        'date': game.date
+                games_in_db = Game.query.filter_by(name=name).all()
+
+                if games_in_db:
+                    best_price_entry = min(games_in_db, key=lambda x: x.price)
+                    additional_matches.append({
+                        'name': name,
+                        'best_price': best_price_entry.price,
+                        'best_store': best_price_entry.store
                     })
 
-    # Mostrar resultados si hay coincidencias
-    if matched_games:
-        # Solo mostrar gráfico del primer juego coincidente como ejemplo
-        game_data = Game.query.filter_by(name=matched_games[0]['name']).all()
-        if game_data:
-            df = pd.DataFrame({
-                'date': [game.date for game in game_data],
-                'price': [game.price for game in game_data],
-                'store': [game.store for game in game_data]
-            })
-
-            current_prices = df[df['date'] == df['date'].max()]
-            min_price_row = current_prices.loc[current_prices['price'].idxmin()]
-            min_price = min_price_row['price']
-            min_price_store = min_price_row['store']
-
-            grouped = df.groupby('store')
-
-            plt.figure(figsize=(10, 6))
-            colors = {'Instant Gaming': 'orange', 'Eneba': 'purple'}
-            for store, group in grouped:
-                plt.plot(group['date'], group['price'], label=store, color=colors.get(store, 'blue'))
-
-            plt.xlabel('Fecha')
-            plt.ylabel('Precio')
-            plt.title(f'Evolución del Precio - {matched_games[0]["name"]}')
-            plt.legend()
-            plt.xticks(rotation=45)
-            plt.grid(True)
-
-            img = io.BytesIO()
-            plt.savefig(img, format='png')
-            img.seek(0)
-            plt.close()
-
-            img_base64 = base64.b64encode(img.getvalue()).decode('utf-8')
-            graph_img = img_base64
-
-    return render_template('home.html', min_price=min_price, min_price_store=min_price_store, graph_img=graph_img, games=matched_games)
+    return render_template('home.html', best_match_game=best_match_game, additional_matches=additional_matches, graph_img=graph_img)
 
 @app.route('/logout')
 @login_required

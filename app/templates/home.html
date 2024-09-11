@@ -8,6 +8,25 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='styles.css') }}"
     />
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      table,
+      th,
+      td {
+        border: 1px solid black;
+      }
+      th,
+      td {
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+    </style>
   </head>
   <body>
     <header>
@@ -16,32 +35,67 @@
     </header>
 
     <main>
-      <h2>Buscar Juego</h2>
-      <form action="{{ url_for('home') }}" method="get">
-        <input type="text" name="game_name" placeholder="Buscar juego" />
+      <h2>Search Game</h2>
+
+      <!-- Formulario de búsqueda -->
+      <form method="GET" action="{{ url_for('home') }}">
+        <input type="text" name="game_name" placeholder="Buscar un juego..." />
         <input type="submit" value="Buscar" />
       </form>
 
-      {% if min_price is not none %}
-      <h3>
-        El menor precio actual para {{ game_name }} es {{ min_price }} en {{
-        min_price_store }}
-      </h3>
+      <!-- Mejor coincidencia -->
+      {% if best_match_game %}
+      <h3>Best Match:</h3>
+      <p><strong>{{ best_match_game.name }}</strong></p>
+      <p>
+        Best Price: {{ best_match_game.best_price }} € in {{
+        best_match_game.best_store }}
+      </p>
+
+      <!-- Gráfico de evolución de precios -->
+      {% if graph_img %}
+      <h4>Price Evolution:</h4>
       <img
         src="data:image/png;base64,{{ graph_img }}"
-        alt="Gráfico de precios"
+        alt="Evolución de Precios"
       />
+      {% endif %} {% else %}
+      <p>No se encontraron coincidencias.</p>
       {% endif %}
 
+      <!-- Coincidencias adicionales -->
+      {% if additional_matches %}
+      <h3>Additional Matches:</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Game</th>
+            <th>Best Price</th>
+            <th>Store</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for game in additional_matches %}
+          <tr>
+            <td>{{ game.name }}</td>
+            <td>{{ game.best_price }} €</td>
+            <td>{{ game.best_store }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+
+      <!-- Actualización de datos -->
       <div class="update-buttons">
         <form action="{{ url_for('update_games_eneba') }}" method="post">
-          <button type="submit">Actualizar Eneba</button>
+          <button type="submit">Update Eneba DB</button>
         </form>
         <form
           action="{{ url_for('update_games_instant_gaming') }}"
           method="post"
         >
-          <button type="submit">Actualizar Instant Gaming</button>
+          <button type="submit">Update Instant Gaming DB</button>
         </form>
       </div>
     </main>
