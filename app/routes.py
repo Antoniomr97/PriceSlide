@@ -82,9 +82,9 @@ def home():
                 plt.figure(figsize=(12, 6))
                 for store, group in df.groupby('store'):
                     plt.plot(group['date'], group['price'], label=store)
-                plt.xlabel('Fecha')
-                plt.ylabel('Precio')
-                plt.title(f'Evolución de Precios - {best_name}')
+                plt.xlabel('Date')
+                plt.ylabel('Price')
+                plt.title(f'Price Evolution - {best_name}')
                 plt.legend()
                 plt.xticks(rotation=45)
                 plt.grid(True)
