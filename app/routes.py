@@ -3,12 +3,21 @@ import base64
 import matplotlib.pyplot as plt
 from flask import render_template, redirect, url_for
 from flask_login import login_user, logout_user, current_user, login_required
-from app import app, db, bcrypt
+from app import app, db, bcrypt, login_manager
 from app.models import User, Game
 from app.forms import LoginForm, RegistrationForm
 from app.eneba_scraper import fetch_game_data_eneba
 from app.g2a_scraper import fetch_game_data_g2a
 from app.instant_gaming_scraper import fetch_game_data_instant_gaming
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+# Redirigir a la página de login desde la ruta principal
+@app.route('/')
+def index():
+    return redirect(url_for('login'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -35,11 +44,6 @@ def login():
 @login_required
 def home():
     return render_template('home.html')
-
-@app.route('/history')
-@login_required
-def history():
-    return render_template('history.html')
 
 @app.route('/logout')
 @login_required

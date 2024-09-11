@@ -1,17 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PriceSlice</title>
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
+      href="{{ url_for('static', filename='styles.css') }}"
     />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #007bff;
+        color: white;
+        padding: 15px 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 2em;
+        flex-grow: 1;
+        text-align: center;
+      }
+      .logout-link {
+        color: red;
+        text-decoration: none;
+        font-size: 1.2em;
+        margin-left: 20px;
+      }
+      .logout-link:hover {
+        text-decoration: underline;
+      }
+      .content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: calc(
+          100vh - 80px
+        ); /* Ajusta la altura para el header más grande */
+        text-align: center;
+      }
+    </style>
   </head>
   <body>
-    <form action="" method="post">
-      <input type="text" name="game" placeholder="Buscar juego" />
-      <input type="submit" value="Buscar" />
-    </form>
-    <a href="{{ url_for('plot') }}">Ver Gráfico de Precios</a>
-    <a href="{{ url_for('logout') }}">Logout</a>
+    <div class="header">
+      <h1>PriceSlice</h1>
+      <a href="{{ url_for('logout') }}" class="logout-link">Log out</a>
+    </div>
+    <div class="content">
+      <!-- Aquí puedes agregar el contenido de tu página de inicio -->
+      <h2>Welcome to PriceSlice!</h2>
+    </div>
   </body>
 </html>
