@@ -1,18 +1,20 @@
 body {
-  font-family: "Arial", sans-serif;
-  background-color: #282c34;
+  font-family: "Press Start 2P", cursive;
   color: #f0f0f0;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: url("https://image.api.playstation.com/vulcan/img/rnd/202010/1520/NXNCl23Cal5LFacqEiWwptkt.png")
+    no-repeat center center fixed;
+  background-size: cover;
 }
 
 header {
   width: 100%;
-  background-color: #20232a;
-  padding: 10px 20px;
+  background-color: rgba(32, 35, 42, 0.8); /* Slightly transparent background */
+  padding: 20px 20px; /* Increased padding for larger header */
   display: flex;
   justify-content: center; /* Center the title horizontally */
   align-items: center;
@@ -22,12 +24,13 @@ header {
   right: 0;
   border-bottom: 2px solid #61dafb;
   box-sizing: border-box;
+  backdrop-filter: blur(10px); /* Blur effect for background */
 }
 
 header h1 {
   color: #61dafb;
   margin: 0;
-  font-size: 24px;
+  font-size: 32px; /* Increased font size */
   text-align: center;
 }
 
@@ -35,18 +38,23 @@ header a {
   color: #ff4c4c;
   text-decoration: none;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 18px; /* Increased font size */
   position: absolute;
   right: 20px;
 }
 
 main {
-  margin-top: 60px; /* Adjust for header height */
+  margin-top: 80px; /* Adjust for increased header height */
   padding: 20px;
   text-align: center;
   width: 100%;
   max-width: 800px;
-  background-color: #3c3f41;
+  background-color: rgba(
+    60,
+    63,
+    65,
+    0.8
+  ); /* Slightly transparent background for content */
   border-radius: 8px;
 }
 
@@ -96,12 +104,33 @@ img {
   margin-top: 20px;
 }
 
-/* Style for the buttons below the logout */
 .update-buttons {
   margin-top: 20px;
 }
 
 .update-buttons form {
   display: inline-block;
-  margin: 0 10px; /* Space between buttons */
+  margin: 0 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table,
+th,
+td {
+  border: 1px solid #61dafb;
+}
+
+th,
+td {
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #20232a;
+  color: #61dafb;
 }

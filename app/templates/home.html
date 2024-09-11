@@ -8,25 +8,10 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='styles.css') }}"
     />
-    <style>
-      table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-      table,
-      th,
-      td {
-        border: 1px solid black;
-      }
-      th,
-      td {
-        padding: 8px;
-        text-align: left;
-      }
-      th {
-        background-color: #f2f2f2;
-      }
-    </style>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <header>
@@ -39,7 +24,7 @@
 
       <!-- Formulario de búsqueda -->
       <form method="GET" action="{{ url_for('home') }}">
-        <input type="text" name="game_name" placeholder="Buscar un juego..." />
+        <input type="text" name="game_name" placeholder="Search a game..." />
         <input type="submit" value="Buscar" />
       </form>
 
@@ -55,10 +40,7 @@
       <!-- Gráfico de evolución de precios -->
       {% if graph_img %}
       <h4>Price Evolution:</h4>
-      <img
-        src="data:image/png;base64,{{ graph_img }}"
-        alt="Evolución de Precios"
-      />
+      <img src="data:image/png;base64,{{ graph_img }}" alt="Price Evolve" />
       {% endif %} {% else %}
       <p>No se encontraron coincidencias.</p>
       {% endif %}

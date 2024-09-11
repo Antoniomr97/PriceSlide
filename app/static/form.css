@@ -1,0 +1,74 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-image: url("https://static1.thegamerimages.com/wordpress/wp-content/uploads/2022/06/RemakeTitleScreen.jpg"); /* Reemplaza con la ruta de tu imagen */
+  background-size: cover; /* Ajusta la imagen para cubrir todo el fondo */
+  background-position: center; /* Centra la imagen */
+  backdrop-filter: blur(5px); /* Aplica desenfoque a la imagen de fondo */
+  font-family: "Press Start 2P", cursive; /* Fuente del texto */
+}
+
+.login-container {
+  width: 400px; /* Ancho del recuadro */
+  padding: 30px; /* Espacio interno */
+  background-color: rgba(
+    60,
+    63,
+    65,
+    0.9
+  ); /* Color de fondo semi-transparente para el contenedor */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Sombra del contenedor */
+  text-align: center;
+  border-radius: 8px; /* Bordes redondeados */
+}
+h1 {
+  color: #61dafb; /* Coincide con el color del texto en home.html */
+  margin-bottom: 20px;
+  font-size: 32px; /* Coincide con el tamaño de fuente en home.html */
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+input[type="text"],
+input[type="password"] {
+  padding: 12px; /* Espacio interno */
+  margin-bottom: 12px; /* Espacio entre campos */
+  border: 2px solid #61dafb; /* Borde de los campos */
+  border-radius: 4px; /* Bordes redondeados */
+  background-color: #20232a; /* Fondo de los campos */
+  color: #f0f0f0; /* Color del texto */
+}
+
+input[type="submit"] {
+  padding: 12px; /* Espacio interno */
+  background-color: #61dafb; /* Color de fondo del botón */
+  color: #20232a; /* Color del texto del botón */
+  border: none;
+  border-radius: 4px; /* Bordes redondeados */
+  cursor: pointer;
+  font-size: 18px; /* Tamaño de la fuente del botón */
+}
+
+input[type="submit"]:hover {
+  background-color: #4fa3c4; /* Color al pasar el mouse por encima, igual que en home.html */
+}
+
+a {
+  display: block;
+  margin-top: 15px; /* Aumenta el espacio arriba del enlace */
+  color: #ff4c4c;
+  text-decoration: none;
+  font-size: 20px; /* Aumenta el tamaño de la fuente del enlace */
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
