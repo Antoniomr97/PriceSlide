@@ -12,6 +12,7 @@ from app.instant_gaming_scraper import fetch_game_data_instant_gaming
 import pandas as pd
 # Importamos matplotlib para la generación de graficos
 import matplotlib
+import matplotlib.dates as mdates
 # Utilizamos Agg para usar el backend sin interfaz, es util para generar graficos en entornos sin interfaz grafica como un servidor
 matplotlib.use('Agg')
 # Proporciona una interfaz para crear gráficos
@@ -115,6 +116,7 @@ def home():
                 plt.ylabel('Price')
                 plt.title(f'Price Evolution - {best_name}')
                 plt.legend()
+                plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M')) #Ajustamos el formato de la fecha
                 plt.xticks(rotation=45)
                 plt.grid(True)
                 plt.tight_layout()
