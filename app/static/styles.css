@@ -6,6 +6,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* Aplicamos una imagen al fondo */
   background: url("https://image.api.playstation.com/vulcan/img/rnd/202010/1520/NXNCl23Cal5LFacqEiWwptkt.png")
     no-repeat center center fixed;
   background-size: cover;
@@ -13,10 +14,15 @@ body {
 
 header {
   width: 100%;
-  background-color: rgba(32, 35, 42, 0.8); /* Slightly transparent background */
-  padding: 20px 20px; /* Increased padding for larger header */
+  background-color: rgba(
+    32,
+    35,
+    42,
+    0.8
+  ); /* Aplicamos un poco de transparencia con el cuarto valor */
+  padding: 20px 20px;
   display: flex;
-  justify-content: center; /* Center the title horizontally */
+  justify-content: center;
   align-items: center;
   position: fixed;
   top: 0;
@@ -24,13 +30,15 @@ header {
   right: 0;
   border-bottom: 2px solid #61dafb;
   box-sizing: border-box;
-  backdrop-filter: blur(10px); /* Blur effect for background */
+  backdrop-filter: blur(
+    10px
+  ); /* Efecto borroso para lo que está detras del elemento */
 }
 
 header h1 {
   color: #61dafb;
   margin: 0;
-  font-size: 32px; /* Increased font size */
+  font-size: 32px;
   text-align: center;
 }
 
@@ -38,23 +46,18 @@ header a {
   color: #ff4c4c;
   text-decoration: none;
   font-weight: bold;
-  font-size: 18px; /* Increased font size */
+  font-size: 18px;
   position: absolute;
   right: 20px;
 }
 
 main {
-  margin-top: 80px; /* Adjust for increased header height */
+  margin-top: 80px;
   padding: 20px;
   text-align: center;
   width: 100%;
   max-width: 800px;
-  background-color: rgba(
-    60,
-    63,
-    65,
-    0.8
-  ); /* Slightly transparent background for content */
+  background-color: rgba(60, 63, 65, 0.8);
   border-radius: 8px;
 }
 
@@ -118,6 +121,7 @@ table {
   border-collapse: collapse;
 }
 
+/* Aplicamos borde a la tabla y sus elementos */
 table,
 th,
 td {
@@ -130,6 +134,7 @@ td {
   text-align: left;
 }
 
+/* Modificamos los colores de las celdas que encabezan las columnas */
 th {
   background-color: #20232a;
   color: #61dafb;

@@ -6,10 +6,6 @@
     <title>PriceSlice</title>
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
-    />
-    <link
-      rel="stylesheet"
       href="{{ url_for('static', filename='form.css') }}"
     />
     <link
@@ -21,16 +17,16 @@
     <div class="login-container">
       <h1>PriceSlice</h1>
       <form action="{{ url_for('register') }}" method="POST">
-        <!-- CSRF token -->
+        <!-- Introducen un campo oculto para protegerse de ataques -->
         {{ form.hidden_tag() }}
 
-        <!-- Username input -->
+        <!-- Input nombre y el error por si falla -->
         <input type="text" name="username" placeholder="User Name" required />
         {% if form.username.errors %}
         <div class="error">{{ form.username.errors[0] }}</div>
         {% endif %}
 
-        <!-- Password input -->
+        <!-- Input de la contraseña -->
         <input
           type="password"
           name="password"
@@ -38,10 +34,12 @@
           required
         />
         {% if form.password.errors %}
+
+        <!-- Controlamos el error que nos proporciona Flask-WTF -->
         <div class="error">{{ form.password.errors[0] }}</div>
         {% endif %}
 
-        <!-- Confirm Password input -->
+        <!-- Input confirmación de contraseña -->
         <input
           type="password"
           name="confirm_password"
@@ -52,7 +50,7 @@
         <div class="error">{{ form.confirm_password.errors[0] }}</div>
         {% endif %}
 
-        <!-- Submit button -->
+        <!-- Boton de registrar -->
         <input type="submit" value="Register" />
       </form>
 

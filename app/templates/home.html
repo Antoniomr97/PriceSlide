@@ -8,6 +8,7 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='styles.css') }}"
     />
+    <!-- Activamos la fuente de texto que queremos usar -->
     <link
       href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
       rel="stylesheet"
@@ -16,28 +17,30 @@
   <body>
     <header>
       <h1>PriceSlice</h1>
+      <!-- Escribimos en una funcion de Flask que genera una URL para una ruta especifica, que redirige a rutas y ejecuta logout que es volver al login y cerrar sesion -->
       <a href="{{ url_for('logout') }}">Logout</a>
     </header>
 
     <main>
       <h2>Search Game</h2>
 
-      <!-- Formulario de búsqueda -->
+      <!-- Formulario de búsqueda, envia lo contido en input a home para obtener los juegos en base a game_name y aplica la logica del backend -->
       <form method="GET" action="{{ url_for('home') }}">
         <input type="text" name="game_name" placeholder="Search a game..." />
         <input type="submit" value="Buscar" />
       </form>
 
-      <!-- Mejor coincidencia -->
+      <!-- Mejor coincidencia, comprobamos con codigo python si hay juego con mejor puntuación -->
       {% if best_match_game %}
       <h3>Best Match:</h3>
       <p><strong>{{ best_match_game.name }}</strong></p>
       <p>
+        <!-- Gracias a Jinja podemos utilizar logica python en el html, lo que permite acceder a los valores de un elemento -->
         Best Price: {{ best_match_game.best_price }} € in {{
         best_match_game.best_store }}
       </p>
 
-      <!-- Gráfico de evolución de precios -->
+      <!-- Gráfico de evolución de precios, vemos si hay grafico y ya realiza lo siguiente -->
       {% if graph_img %}
       <h4>Price Evolution:</h4>
       <img src="data:image/png;base64,{{ graph_img }}" alt="Price Evolve" />
@@ -68,7 +71,7 @@
       </table>
       {% endif %}
 
-      <!-- Actualización de datos -->
+      <!-- Actualización de datos, cada botón actualiza datos de una base de datos -->
       <div class="update-buttons">
         <form action="{{ url_for('update_games_eneba') }}" method="post">
           <button type="submit">Update Eneba DB</button>

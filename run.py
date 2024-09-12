@@ -1,10 +1,9 @@
+# Importamos el objeto de la aplicación Flask
 from app import app
-# from app.eneba_scraper import fetch_game_data_eneba
-from app.instant_gaming_scraper import fetch_game_data_instant_gaming
 
-
+# Este bloque de código garantiza que la aplicación solo iniciara si se ejecuta directamente en este archivo y no importado
 if __name__ == "__main__":
+    # Crea el contexto para controlar donde se ejecuta todo
     with app.app_context():
-     #     fetch_game_data_eneba() # Llama al scraper de eneba dentro del contexto de la aplicación
-        #  fetch_game_data_instant_gaming()  # Llama al scraper de instant gaming dentro del contexto de la aplicación
+        # Se inicia el servidor con debug activo que permite ir editando cosas mientras esta corriendo el servidor y se actualiza solo
         app.run(debug=True)
