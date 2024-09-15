@@ -1,4 +1,4 @@
-# Importamos Flask para manejar el acceso de datos de solicitudes y la generación Urls y diversos usos
+# Importamos Flask para manejar el acceso de datos de solicitudes y la generación de Urls y diversos usos
 from flask import render_template, redirect, url_for, request
 # Importamos Flask-Login para la gestion de la autentificación y sesiones de usuario
 from flask_login import login_user, logout_user, current_user, login_required
@@ -28,7 +28,7 @@ from fuzzywuzzy import process, fuzz
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# Esta routa hace que el programa empiece en login
+# Esta ruta hace que el programa empiece en login
 @app.route('/')
 def index():
     return redirect(url_for('login'))
@@ -77,13 +77,13 @@ def home():
         # Extrae las mejores coincidencias con extractBests marcandole los parametros
         matches = process.extractBests(game_name, game_names, limit=5, scorer=fuzz.partial_ratio)
         # Utilizado para conseguir la coincidencia más parecida
-        best_match = min(matches, key=lambda x: (100 - x[1], len(x[0])))
+        best_match = max(matches, key=lambda x: x[1])  # Usar max en lugar de min para obtener la mejor coincidencia
 
         # Elige el primer elemento de los mejores match
         best_name = best_match[0]
 
         # Busca los juegos en la base de datos
-        games_in_db = Game.query.filter_by(name=best_name).all()
+        games_in_db = Game.query.filter(Game.name.ilike(f'%{best_name}%')).all()
 
         if games_in_db:
             # Compara los precios de la busqueda y pone el de menor precio
@@ -103,24 +103,39 @@ def home():
                 'store': game.store
             } for game in games_in_db]
 
-            # Generar gráfico de evolución de precios
-            if historical_data:
-                df = pd.DataFrame(historical_data)
+            # Filtrar datos históricos para mostrar solo las fechas con cambios de precio
+            filtered_historical_data = []
+            for store, group in pd.DataFrame(historical_data).groupby('store'):
+                group = group.sort_values(by='date')  # Ordenar por fecha
+                previous_price = None
+                for _, row in group.iterrows():
+                    # Solo guardar la fila si el precio ha cambiado
+                    if previous_price is None or row['price'] != previous_price:
+                        filtered_historical_data.append(row)
+                    previous_price = row['price']
+
+            # Generar gráfico de evolución de precios solo con los cambios de precio
+            if filtered_historical_data:
+                df = pd.DataFrame(filtered_historical_data)
                 plt.figure(figsize=(12, 6))
-                # Agrupamos los datos por tienda, traza la linea para cada tienda, mostrando la evolución de los precios a lo largo del tiempo
+
+                # Agrupar por tienda y trazar los puntos donde hubo cambios de precio
                 for store, group in df.groupby('store'):
-                    plt.plot(group['date'], group['price'], label=store)
-                
-                # Aplicamos los datos que apareceran en Date y Price
+                    plt.plot(group['date'], group['price'], label=store, marker='o')  # Usar marcadores para los puntos de cambio
+
+                # Aplicamos los datos que aparecerán en Date y Price
                 plt.xlabel('Date')
                 plt.ylabel('Price')
                 plt.title(f'Price Evolution - {best_name}')
                 plt.legend()
-                plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M')) #Ajustamos el formato de la fecha
+
+                # Formatear las fechas correctamente en el eje X
+                plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M'))
                 plt.xticks(rotation=45)
                 plt.grid(True)
                 plt.tight_layout()
 
+                # Guardar la imagen como base64 para mostrarla en HTML
                 img = io.BytesIO()
                 plt.savefig(img, format='png')
                 img.seek(0)
@@ -132,7 +147,7 @@ def home():
         for match in matches:
             if match[0] != best_name:
                 name = match[0]
-                games_in_db = Game.query.filter_by(name=name).all()
+                games_in_db = Game.query.filter(Game.name.ilike(f'%{name}%')).all()
 
                 if games_in_db:
                     best_price_entry = min(games_in_db, key=lambda x: x.price)
