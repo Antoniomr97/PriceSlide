@@ -17,36 +17,43 @@
   <body>
     <header>
       <h1>PriceSlice</h1>
-      <!-- Escribimos en una funcion de Flask que genera una URL para una ruta especifica, que redirige a rutas y ejecuta logout que es volver al login y cerrar sesion -->
+      <!-- Escribimos en una función de Flask que genera una URL para una ruta específica, que redirige a rutas y ejecuta logout que es volver al login y cerrar sesión -->
       <a href="{{ url_for('logout') }}">Logout</a>
     </header>
 
     <main>
       <h2>Search Game</h2>
 
-      <!-- Formulario de búsqueda, envia lo contido en input a home para obtener los juegos en base a game_name y aplica la logica del backend -->
+      <!-- Formulario de búsqueda, envía lo contenido en input a home para obtener los juegos en base a game_name y aplica la lógica del backend -->
       <form method="GET" action="{{ url_for('home') }}">
         <input type="text" name="game_name" placeholder="Search a game..." />
         <input type="submit" value="Buscar" />
       </form>
 
-      <!-- Mejor coincidencia, comprobamos con codigo python si hay juego con mejor puntuación -->
+      <!-- Mensaje para que se introduzca un juego, solo se muestra si es la primera carga y no hay busquedas -->
+      {% if not game_name %}
+      <p>Please introduce a game</p>
+      {% endif %}
+
+      <!-- Mejor coincidencia, comprobamos con código Python si hay juego con mejor puntuación -->
       {% if best_match_game %}
       <h3>Best Match:</h3>
       <p><strong>{{ best_match_game.name }}</strong></p>
       <p>
-        <!-- Gracias a Jinja podemos utilizar logica python en el html, lo que permite acceder a los valores de un elemento -->
+        <!-- Gracias a Jinja podemos utilizar lógica Python en el HTML, lo que permite acceder a los valores de un elemento -->
         Best Price: {{ best_match_game.best_price }} € in {{
         best_match_game.best_store }}
       </p>
 
-      <!-- Gráfico de evolución de precios, vemos si hay grafico y ya realiza lo siguiente -->
+      <!-- Gráfico de evolución de precios, vemos si hay gráfico y ya realiza lo siguiente -->
       {% if graph_img %}
       <h4>Price Evolution:</h4>
       <img src="data:image/png;base64,{{ graph_img }}" alt="Price Evolve" />
       {% endif %} {% else %}
+      <!-- Mensaje cuando no se encuentran coincidencias -->
+      {% if game_name %}
       <p>No se encontraron coincidencias.</p>
-      {% endif %}
+      {% endif %} {% endif %}
 
       <!-- Coincidencias adicionales -->
       {% if additional_matches %}
