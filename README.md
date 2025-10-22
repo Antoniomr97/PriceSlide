@@ -1,4 +1,4 @@
-# 🎮 **PriceSlide** - Video Game Price Tracker 🕹️
+# 🎮 **PriceSlice** - Video Game Price Tracker 🕹️
 
 PriceSlide is a web application designed to help gamers find the best deals on video games by comparing prices across multiple online stores. Keep track of price changes over time and make smarter purchasing decisions!
 
